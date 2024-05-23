@@ -17,7 +17,18 @@ private:
     queue<Student> students;
     queue<Teacher> teachers;
     queue<Course> courses;
+
+    void saveStudents();
+    void saveTeachers();
+    void saveCourses();
+    void loadStudents();
+    void loadTeachers();
+    void loadCourses();
+
 public:
+    LMS();
+    ~LMS();
+
     void addStudent(string username, string password);
     void addTeacher(string username, string password);
     void addCourse(int id, string name, string desc, string teacherUsername);

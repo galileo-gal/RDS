@@ -7,20 +7,26 @@
 
 #include <string>
 #include <queue>
+#include <fstream>
+#include <ostream>
+using namespace std;
 
 class Student {
+private:
+    string username;
+    string password;
+    priority_queue<int> courseList;
+
 public:
-    std::string username;
-    std::string password;
-    std::priority_queue<int> courseList;
-    std::string getUsername();
+    Student() = default;
+    Student(string username, string password);
+    string getUsername();
+    string getPassword();
+    priority_queue<int> getCourseList();
+    void enrollInCourse(int courseID);
 
-    Student(std::string u, std::string p);
-
-    void enrollInCourse(int courseId);
-
-    std::string getPassword();
-    std::priority_queue<int> getCourseList();
+    friend ofstream& operator<<(ofstream& ofs, const Student& student);
+    friend ifstream& operator>>(ifstream& ifs, Student& student);
 
 };
 

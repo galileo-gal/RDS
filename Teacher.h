@@ -7,22 +7,30 @@
 
 #include <string>
 #include <queue>
+#include <fstream>
+#include <ostream>
+
+using namespace std;
 
 class Teacher {
+
+private:
+    string username;
+    string password;
+    priority_queue<int> courseList;
+
 public:
-    std::string username;
-    std::string password;
-    std::priority_queue<int> courseList;
-
-
+    Teacher()=default;
     Teacher(std::string u, std::string p);
+    ~Teacher()=default;
 
     std::string getUsername();
     void addCourse(int courseId);
-
     std::string getPassword();
-
     std::priority_queue<int> getCourseList();
+
+    friend ofstream& operator<<(ofstream& ofs, const Teacher& teacher);
+    friend ifstream& operator>>(ifstream& ifs, Teacher& teacher);
 };
 
 

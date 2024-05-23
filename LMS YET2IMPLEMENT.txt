@@ -2,36 +2,51 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <fstream>
 
 using namespace std;
+
 LMS::LMS() {
     loadStudents();
     loadTeachers();
     loadCourses();
 }
 
-LMS::~LMS(){
+LMS::~LMS() {
     saveStudents();
     saveTeachers();
     saveCourses();
 }
 
+void LMS::saveStudents() {
+    ofstream file("students.dat", ios::binary);
+    queue<Student> temp = students;
+    while (!temp.empty()) {
+        Student student = temp.front();
+        temp.pop();
+        file << student;
+    }
+    file.close();
+}
+
 void LMS::saveTeachers() {
     ofstream file("teachers.dat", ios::binary);
-    while (!teachers.empty()) {
-        Teacher teacher = teachers.front();
-        teachers.pop();
-        file.write(reinterpret_cast<const char*>(&teacher), sizeof(Teacher));
+    queue<Teacher> temp = teachers;
+    while (!temp.empty()) {
+        Teacher teacher = temp.front();
+        temp.pop();
+        file << teacher;
     }
     file.close();
 }
 
 void LMS::saveCourses() {
     ofstream file("courses.dat", ios::binary);
-    while (!courses.empty()) {
-        Course course = courses.front();
-        courses.pop();
-        file.write(reinterpret_cast<const char*>(&course), sizeof(Course));
+    queue<Course> temp = courses;
+    while (!temp.empty()) {
+        Course course = temp.front();
+        temp.pop();
+        file << course;
     }
     file.close();
 }
@@ -39,12 +54,10 @@ void LMS::saveCourses() {
 void LMS::loadStudents() {
     ifstream file("students.dat", ios::binary);
     if (!file.is_open()) return;
-    while (!file.eof()) {
+    while (file.peek() != EOF) {
         Student student;
-        file.read(reinterpret_cast<char*>(&student), sizeof(Student));
-        if (file.gcount() == sizeof(Student)) {
-            students.push(student);
-        }
+        file >> student;
+        students.push(student);
     }
     file.close();
 }
@@ -52,12 +65,10 @@ void LMS::loadStudents() {
 void LMS::loadTeachers() {
     ifstream file("teachers.dat", ios::binary);
     if (!file.is_open()) return;
-    while (!file.eof()) {
+    while (file.peek() != EOF) {
         Teacher teacher;
-        file.read(reinterpret_cast<char*>(&teacher), sizeof(Teacher));
-        if (file.gcount() == sizeof(Teacher)) {
-            teachers.push(teacher);
-        }
+        file >> teacher;
+        teachers.push(teacher);
     }
     file.close();
 }
@@ -65,16 +76,13 @@ void LMS::loadTeachers() {
 void LMS::loadCourses() {
     ifstream file("courses.dat", ios::binary);
     if (!file.is_open()) return;
-    while (!file.eof()) {
+    while (file.peek() != EOF) {
         Course course;
-        file.read(reinterpret_cast<char*>(&course), sizeof(Course));
-        if (file.gcount() == sizeof(Course)) {
-            courses.push(course);
-        }
+        file >> course;
+        courses.push(course);
     }
     file.close();
 }
-
 
 void LMS::addStudent(string username, string password) {
     queue<Student> proxy;
@@ -238,7 +246,14 @@ void LMS::studentMenu(string username) {
                         while (!courseList.empty()) {
                             int courseId = courseList.top();
                             courseList.pop();
-                            cout << "Course ID: " << courseId << ", Name: " << courses.front().getCourseName() << "\n";
+                            queue<Course> courseProxy = courses;
+                            while (!courseProxy.empty()) {
+                                if (courseProxy.front().getCourseId() == courseId) {
+                                    cout << "Course ID: " << courseId << ", Name: " << courseProxy.front().getCourseName() << "\n";
+                                    break;
+                                }
+                                courseProxy.pop();
+                            }
                         }
                         break;
                     }
@@ -254,7 +269,12 @@ void LMS::studentMenu(string username) {
                 break;
             }
             case 3:
-                cout << "Logging out...\n";
+               
+finish the code 
+ChatGPT
+cpp
+Copy code
+            cout << "Logging out...\n";
                 break;
             default:
                 cout << "Invalid choice. Try again.\n";
@@ -283,7 +303,14 @@ void LMS::teacherMenu(string username) {
                         while (!courseList.empty()) {
                             int courseId = courseList.top();
                             courseList.pop();
-                            cout << "Course ID: " << courseId << ", Name: " << courses.front().getCourseName() << "\n";
+                            queue<Course> courseProxy = courses;
+                            while (!courseProxy.empty()) {
+                                if (courseProxy.front().getCourseId() == courseId) {
+                                    cout << "Course ID: " << courseId << ", Name: " << courseProxy.front().getCourseName() << "\n";
+                                    break;
+                                }
+                                courseProxy.pop();
+                            }
                         }
                         break;
                     }
@@ -422,10 +449,24 @@ void LMS::mainMenu() {
                 adminMenu();
                 break;
             case 4:
+                cout << "Exiting...\n
+
+4/4
+
+done ?
+ChatGPT
+cpp
+Copy code
                 cout << "Exiting...\n";
                 break;
             default:
                 cout << "Invalid choice. Try again.\n";
         }
     } while (choice != 4);
+}
+
+int main() {
+    LMS lms;
+    lms.mainMenu();
+    return 0;
 }
