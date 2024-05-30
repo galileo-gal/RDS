@@ -5,29 +5,29 @@
 
 using namespace std;
 
-void LMS::addStudent(string username, string password) {
+void LMS::addStudent(string username, string password, int id) {
     queue<Student> proxy;
     while (!students.empty()) {
-        if (students.front().getUsername() == username) {
+        if (students.front().getId() == id) {
             throw runtime_error("Student already exists");
         }
         proxy.push(students.front());
         students.pop();
     }
-    proxy.push(Student(username, password));
+    proxy.push(Student(username, password, id));
     students = proxy;
 }
 
-void LMS::addTeacher(string username, string password) {
+void LMS::addTeacher(string username, string password, int id) {
     queue<Teacher> proxy;
     while (!teachers.empty()) {
-        if (teachers.front().getUsername() == username) {
+        if (teachers.front().getId() == id) {
             throw runtime_error("Teacher already exists");
         }
         proxy.push(teachers.front());
         teachers.pop();
     }
-    proxy.push(Teacher(username, password));
+    proxy.push(Teacher(username, password, id));
     teachers = proxy;
 }
 
@@ -36,7 +36,7 @@ void LMS::addCourse(int id, string name, string desc, string teacherUsername) {
     Teacher* teacher = nullptr;
 
     while (!teachers.empty()) {
-        if (teachers.front().getUsername() == teacherUsername) {
+        if (teachers.front().getId() == id) {
             teacher = new Teacher(teachers.front());
         }
         proxyTeacher.push(teachers.front());
@@ -68,7 +68,7 @@ void LMS::enrollStudentInCourse(string studentUsername, int courseID) {
     Course* course = nullptr;
 
     while (!students.empty()) {
-        if (students.front().getUsername() == studentUsername) {
+        if (students.front().getId() == courseID) {
             student = new Student(students.front());
         }
         proxyStudent.push(students.front());
@@ -102,7 +102,7 @@ void LMS::listStudents() {
     queue<Student> proxy = students;
     cout << "Students in the institute:" << endl;
     while (!proxy.empty()) {
-        cout << proxy.front().getUsername() << endl;
+        cout << proxy.front().getId() << endl;
         proxy.pop();
     }
 }
@@ -111,7 +111,7 @@ void LMS::listTeachers() {
     queue<Teacher> proxy = teachers;
     cout << "Teachers in the institute:" << endl;
     while (!proxy.empty()) {
-        cout << proxy.front().getUsername() << endl;
+        cout << proxy.front().getId() << endl;
         proxy.pop();
     }
 }
@@ -125,10 +125,10 @@ void LMS::listCourses() {
     }
 }
 
-bool LMS::loginStudent(string username, string password) {
+bool LMS::loginStudent(string username, string password, int id) {
     queue<Student> proxy = students;
     while (!proxy.empty()) {
-        if (proxy.front().getUsername() == username && proxy.front().getPassword() == password) {
+        if (proxy.front().getUsername() == username && proxy.front().getPassword() == password && proxy.front().getId()==id) {
             return true;
         }
         proxy.pop();
@@ -136,10 +136,10 @@ bool LMS::loginStudent(string username, string password) {
     return false;
 }
 
-bool LMS::loginTeacher(string username, string password) {
+bool LMS::loginTeacher(string username, string password, int id) {
     queue<Teacher> proxy = teachers;
     while (!proxy.empty()) {
-        if (proxy.front().getUsername() == username && proxy.front().getPassword() == password) {
+        if (proxy.front().getUsername() == username && proxy.front().getPassword() == password && proxy.front().getId()==id) {
             return true;
         }
         proxy.pop();
