@@ -12,15 +12,17 @@ class Teacher {
 public:
     std::string username;
     std::string password;
+    std::int id;
     std::priority_queue<int> courseList;
 
 
-    Teacher(std::string u, std::string p);
+    Teacher(std::string u, std::string p, std::id);
 
     std::string getUsername();
     void addCourse(int courseId);
 
-    std::string getPassword();
+    std::string getPassword(); 
+    std::int getId();
 
     std::priority_queue<int> getCourseList();
 };
