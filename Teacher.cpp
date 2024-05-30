@@ -4,7 +4,7 @@
 
 #include "Teacher.h"
 
-Teacher::Teacher(std::string u, std::string p) : username(u), password(p) {}
+Teacher::Teacher(std::string u, std::string p, std:: int id) : username(u), password(p), id(id) {}
 
 void Teacher::addCourse(int courseId) {
     courseList.push(courseId);
@@ -14,6 +14,9 @@ std::string Teacher::getUsername() {
 }
 std::string Teacher::getPassword(){
     return this->password;
+}
+std::int Teacher::getId(){
+    return this->id;
 }
 std::priority_queue<int> Teacher::getCourseList() {
     return this->courseList;
