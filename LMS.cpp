@@ -147,7 +147,7 @@ bool LMS::loginTeacher(string username, string password, int id) {
     return false;
 }
 
-void LMS::studentMenu(string username) {
+void LMS::studentMenu(int id) {
     int choice;
     do {
         cout << "\nStudent Menu\n";
@@ -161,7 +161,7 @@ void LMS::studentMenu(string username) {
             case 1: {
                 queue<Student> proxy = students;
                 while (!proxy.empty()) {
-                    if (proxy.front().getUsername() == username) {
+                    if (proxy.front().getId() == id) {
                         priority_queue<int> courseList = proxy.front().getCourseList();
                         cout << "Enrolled Courses:\n";
                         while (!courseList.empty()) {
@@ -191,7 +191,7 @@ void LMS::studentMenu(string username) {
     } while (choice != 3);
 }
 
-void LMS::teacherMenu(string username) {
+void LMS::teacherMenu(int id) {
     int choice;
     do {
         cout << "\nTeacher Menu\n";
@@ -206,7 +206,7 @@ void LMS::teacherMenu(string username) {
             case 1: {
                 queue<Teacher> proxy = teachers;
                 while (!proxy.empty()) {
-                    if (proxy.front().getUsername() == username) {
+                    if (proxy.front().getId() == id) {
                         priority_queue<int> courseList = proxy.front().getCourseList();
                         cout << "Courses:\n";
                         while (!courseList.empty()) {
@@ -263,20 +263,26 @@ void LMS::adminMenu() {
         switch (choice) {
             case 1: {
                 string username, password;
+                int id;
                 cout << "Enter Student Username: ";
                 cin >> username;
                 cout << "Enter Password: ";
                 cin >> password;
-                addStudent(username, password);
+                cout << "Enter id: ";
+                cin >> id;
+                addStudent(username, password, id);
                 break;
             }
             case 2: {
                 string username, password;
+                int id;
                 cout << "Enter Teacher Username: ";
                 cin >> username;
                 cout << "Enter Password: ";
                 cin >> password;
-                addTeacher(username, password);
+                cout <<"Enter ID: "
+                cin >> id;
+                addTeacher(username, password, id);
                 break;
             }
             case 3: {
@@ -323,15 +329,17 @@ void LMS::mainMenu() {
         cout << "Enter choice: ";
         cin >> choice;
 
-        string username, password;
+        
         switch (choice) {
             case 1:
                 cout << "Enter Student Username: ";
                 cin >> username;
                 cout << "Enter Password: ";
                 cin >> password;
-                if (loginStudent(username, password)) {
-                    studentMenu(username);
+                cout << "Enter id: ";
+                cin >> id;
+                if (loginStudent(username, password,id)) {
+                    studentMenu(id);
                 } else {
                     cout << "Invalid credentials. Try again.\n";
                 }
@@ -341,8 +349,10 @@ void LMS::mainMenu() {
                 cin >> username;
                 cout << "Enter Password: ";
                 cin >> password;
-                if (loginTeacher(username, password)) {
-                    teacherMenu(username);
+                cout << "Enter id: ";
+                cin >> id;
+                if (loginTeacher(username, password, id)) {
+                    teacherMenu(id);
                 } else {
                     cout << "Invalid credentials. Try again.\n";
                 }
