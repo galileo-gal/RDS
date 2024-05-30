@@ -18,17 +18,17 @@ private:
     queue<Teacher> teachers;
     queue<Course> courses;
 public:
-    void addStudent(string username, string password);
-    void addTeacher(string username, string password);
+    void addStudent(string username, string password, int id);
+    void addTeacher(string username, string password, int id);
     void addCourse(int id, string name, string desc, string teacherUsername);
     void enrollStudentInCourse(string studentUsername, int courseID);
     void listStudents();
     void listTeachers();
     void listCourses();
-    bool loginStudent(string username, string password);
-    bool loginTeacher(string username, string password);
-    void studentMenu(string username);
-    void teacherMenu(string username);
+    bool loginStudent(string username, string password, int id);
+    bool loginTeacher(string username, string password, int id);
+    void studentMenu(int id);
+    void teacherMenu(int id);
     void adminMenu();
     void mainMenu();
 
