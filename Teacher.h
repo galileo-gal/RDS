@@ -1,37 +1,31 @@
-//
-// Created by Lappy on 5/20/2024.
-//
-
-#ifndef STUDENTMANAGEMENTSYSTEM_TEACHER_H
-#define STUDENTMANAGEMENTSYSTEM_TEACHER_H
+#ifndef TEACHER_H
+#define TEACHER_H
 
 #include <string>
-#include <queue>
-#include <fstream>
-#include <ostream>
-
-using namespace std;
+#include "LinkedList.h"
+#include "Course.h"
 
 class Teacher {
+public:
+    Teacher(std::string u, std::string p, int id);
+    Teacher()=default;
+    std::string getUsername() const;
+    std::string getPassword() const;
+    int getId() const;
+    LinkedList<int> getCourseList() const;
+
+    bool operator==(const Teacher& other) const;
+    bool operator<(const Teacher& other) const;
+    bool operator>(const Teacher& other) const;
+    void addCourseUnderTeacher(int courseID);
 
 private:
-    string username;
-    string password;
-    priority_queue<int> courseList;
+    std::string username;
+    std::string password;
+    int id;
+    LinkedList<int> courseList;
 
-public:
-    Teacher()=default;
-    Teacher(std::string u, std::string p);
-    ~Teacher()=default;
-
-    std::string getUsername();
-    void addCourse(int courseId);
-    std::string getPassword();
-    std::priority_queue<int> getCourseList();
-
-    friend ofstream& operator<<(ofstream& ofs, const Teacher& teacher);
-    friend ifstream& operator>>(ifstream& ifs, Teacher& teacher);
+    bool hasCourse(int Id);
 };
 
-
-#endif //STUDENTMANAGEMENTSYSTEM_TEACHER_H
+#endif // TEACHER_H

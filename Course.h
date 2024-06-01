@@ -1,40 +1,35 @@
-//
-// Created by Lappy on 5/20/2024.
-//
-
-#ifndef STUDENTMANAGEMENTSYSTEM_COURSE_H
-#define STUDENTMANAGEMENTSYSTEM_COURSE_H
-
+#ifndef COURSE_H
+#define COURSE_H
 
 #include <string>
-#include <queue>
-#include <fstream>
-#include <ostream>
+#include "LinkedList.h"
+#include "Student.h"
 #include "Teacher.h"
-using namespace std;
 class Teacher;
-
+class Student;
 class Course {
-private:
-    int courseId;
-    string courseName;
-    string courseDescription;
-    Teacher* teacher;
-    priority_queue<string> studentList;
-
 public:
-    Course()=default;
-    Course(int id, std::string name, std::string desc, Teacher* t);
-    ~Course()=default;
-    void addStudent(std::string username);
-    int getCourseId();
-    string getCourseName();
-    string getCourseDesc();
-    Teacher* getTeacher();
-    priority_queue<string> getStudentNames();
+    Course(int id, std::string name, int  t);
+    Course(int id, std::string name);
+    void addStudent(int id);
+    void removeStudent(int studentId);
+    std::string getCourseName() const;
+    int getId() const;
+    void addTeacherUnderCourse(int teacher);
+    void viewCourse() const;
+    LinkedList<int> getStudentList() const;
+    bool hasStudent(int Id);
+    bool operator==(const Course& other) const;
+    bool operator<(const Course& other) const;
+    bool operator>(const Course& other) const;
 
-    friend ofstream& operator<<(ofstream& ofs, const Course& course);
-    friend ifstream& operator>>(ifstream& ifs, Course& course);
+private:
+    int id;
+    std::string courseName;
+    int teacher = 0;
+    LinkedList<int > studentList;
+
+    bool removeTeacher();
 };
 
-#endif //STUDENTMANAGEMENTSYSTEM_COURSE_H
+#endif // COURSE_H

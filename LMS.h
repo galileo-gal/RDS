@@ -1,50 +1,34 @@
-//
-// Created by Lappy on 5/20/2024.
-//
+#ifndef LMS_H
+#define LMS_H
 
-#ifndef STUDENTMANAGEMENTSYSTEM_LMS_H
-#define STUDENTMANAGEMENTSYSTEM_LMS_H
-
-#include <queue>
-#include <string>
+#include "LinkedList.h"
 #include "Student.h"
 #include "Teacher.h"
 #include "Course.h"
-
-using namespace std;
+#include "BST.h"
+class Student;
+class Teacher;
+class Course;
 class LMS {
-private:
-    queue<Student> students;
-    queue<Teacher> teachers;
-    queue<Course> courses;
-
-    void saveStudents();
-    void saveTeachers();
-    void saveCourses();
-    void loadStudents();
-    void loadTeachers();
-    void loadCourses();
-
 public:
-    LMS();
-    ~LMS();
+    void addStudent(std::string username, std::string password, int id);
+    void addTeacher(std::string username, std::string password, int id);
+    void addCourse(int id, std::string name, std::string desc, std::string teacherUsername);
+    void enrollStudentInCourse(std::string studentUsername, int courseID);
+    void removeStudentFromCourse(std::string studentUsername, int courseID);
+    void listStudents() const;
+    void listTeachers() const;
+    void listCourses() const;
+    bool loginStudent(std::string username, std::string password, int id);
+    bool loginTeacher(std::string username, std::string password, int id);
+    Student findStudentById(int id) const;
+    Teacher findTeacherById(int id) const;
+    Course findCourseById(int id) const;
 
-    void addStudent(string username, string password);
-    void addTeacher(string username, string password);
-    void addCourse(int id, string name, string desc, string teacherUsername);
-    void enrollStudentInCourse(string studentUsername, int courseID);
-    void listStudents();
-    void listTeachers();
-    void listCourses();
-    bool loginStudent(string username, string password);
-    bool loginTeacher(string username, string password);
-    void studentMenu(string username);
-    void teacherMenu(string username);
-    void adminMenu();
-    void mainMenu();
-
-
+private:
+    BST<Student> students;
+    BST<Teacher> teachers;
+    BST<Course> courses;
 };
 
-
-#endif //STUDENTMANAGEMENTSYSTEM_LMS_H
+#endif // LMS_H

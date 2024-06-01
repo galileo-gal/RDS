@@ -1,81 +1,49 @@
-//
-// Created by Lappy on 5/20/2024.
-//
-
 #include "Course.h"
+#include <iostream>
 
-Course::Course(int id, std::string name, std::string desc, Teacher* t)
-        : courseId(id), courseName(name), courseDescription(desc), teacher(t) {}
+Course::Course(int id, std::string name, int t) : id(id), courseName(name), teacher(t) {}
 
-void Course::addStudent(std::string username) {
-    studentList.push(username);
+Course::Course(int id, std::string name) : id(id), courseName(name) {}
+
+void Course::addStudent(int student) {
+    studentList.add(student);
 }
-std::string Course::getCourseName(){
+
+void Course::removeStudent(int studentId) {
+    studentList.remove(studentId);
+}
+
+std::string Course::getCourseName() const {
     return this->courseName;
 }
-int Course::getCourseId() {
-    return this->courseId;
+
+int Course::getId() const {
+    return this->id;
 }
 
-string Course::getCourseDesc(){
-    return this->courseDescription;
-}
-Teacher* Course::getTeacher() {
-    return this->teacher;
-}
-priority_queue<string> Course::getStudentNames() {
+LinkedList<int> Course::getStudentList() const {
     return this->studentList;
 }
-ofstream& operator<<(ofstream& ofs, const Course& course) {
-    ofs.write(reinterpret_cast<const char*>(&course.courseId), sizeof(course.courseId));
-    size_t nameLength = course.courseName.size();
-    size_t descLength = course.courseDescription.size();
-    ofs.write(reinterpret_cast<const char*>(&nameLength), sizeof(nameLength));
-    ofs.write(course.courseName.c_str(), nameLength);
-    ofs.write(reinterpret_cast<const char*>(&descLength), sizeof(descLength));
-    ofs.write(course.courseDescription.c_str(), descLength);
 
-    // Serialize teacher pointer as an integer (e.g., teacher ID or a unique identifier)
-    int teacherId = (course.teacher != nullptr) ? course.teacher->getId() : -1;
-    ofs.write(reinterpret_cast<const char*>(&teacherId), sizeof(teacherId));
-
-    size_t studentCount = course.studentUsernames.size();
-    ofs.write(reinterpret_cast<const char*>(&studentCount), sizeof(studentCount));
-    queue<string> temp = course.studentUsernames;
-    while (!temp.empty()) {
-        string studentUsername = temp.front();
-        temp.pop();
-        size_t studentLength = studentUsername.size();
-        ofs.write(reinterpret_cast<const char*>(&studentLength), sizeof(studentLength));
-        ofs.write(studentUsername.c_str(), studentLength);
-    }
-    return ofs;
+bool Course::operator==(const Course& other) const {
+    return this->id == other.id;
+}
+bool Course::operator<(const Course& other) const {
+    return this->id < other.id;
+}
+bool Course::operator>(const Course& other) const {
+    return this->id > other.id;
+}
+void Course::addTeacherUnderCourse(int teacher) {
+    this->teacher=teacher;
+}
+bool Course::removeTeacher(){
+    this->teacher=0;
 }
 
-ifstream& operator>>(ifstream& ifs, Course& course) {
-    ifs.read(reinterpret_cast<char*>(&course.courseId), sizeof(course.courseId));
-    size_t nameLength;
-    size_t descLength;
-    ifs.read(reinterpret_cast<char*>(&nameLength), sizeof(nameLength));
-    course.courseName.resize(nameLength);
-    ifs.read(&course.courseName[0], nameLength);
-    ifs.read(reinterpret_cast<char*>(&descLength), sizeof(descLength));
-    course.courseDescription.resize(descLength);
-    ifs.read(&course.courseDescription[0], descLength);
-
-    // Deserialize teacher pointer as an integer (e.g., teacher ID or a unique identifier)
-    int teacherId;
-    ifs.read(reinterpret_cast<char*>(&teacherId), sizeof(teacherId));
-    course.teacher = (teacherId != -1) ? getTeacherById(teacherId) : nullptr;
-
-    size_t studentCount;
-    ifs.read(reinterpret_cast<char*>(&studentCount), sizeof(studentCount));
-    for (size_t i = 0; i < studentCount; ++i) {
-        size_t studentLength;
-        ifs.read(reinterpret_cast<char*>(&studentLength), sizeof(studentLength));
-        string studentUsername(studentLength, ' ');
-        ifs.read(&studentUsername[0], studentLength);
-        course.studentUsernames.push(studentUsername);
-    }
-    return ifs;
+void Course::viewCourse() const {
+    std::cout << "Name: " << this->courseName << " Id: " << this->id << std::endl;
+}
+bool Course::hasStudent(int Id) {
+    return studentList.find(Id);
 }

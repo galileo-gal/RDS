@@ -1,56 +1,39 @@
-//
-// Created by Lappy on 5/20/2024.
-//
-
 #include "Student.h"
-#include <string>
+#include <iostream>
+#include <list>
+
+Student::Student(std::string name, std::string pass, int id) : studentName(name), studentPass(pass), id(id) {}
 
 
-
-Student::Student(std::string u, std::string p) : username(u), password(p) {}
-
-void Student::enrollInCourse(int courseId) {
-    courseList.push(courseId);
-}
-std::string Student::getUsername() {
-    return this->username;
-}
-std::string Student::getPassword(){
-    return this->password;
-}
-std::priority_queue<int> Student::getCourseList() {
-    return this->courseList;
+std::string Student::getName() const {
+    return this->studentName;
 }
 
-ofstream& operator<<(ofstream& ofs, const Student& student) {
-    size_t usernameLength = student.username.size();
-    size_t passwordLength = student.password.size();
-    ofs.write(reinterpret_cast<const char*>(&usernameLength), sizeof(usernameLength));
-    ofs.write(student.username.c_str(), usernameLength);
-    ofs.write(reinterpret_cast<const char*>(&passwordLength), sizeof(passwordLength));
-    ofs.write(student.password.c_str(), passwordLength);
-    priority_queue<int> temp = student.courseList;
-    while (!temp.empty()) {
-        int courseID = temp.top();
-        temp.pop();
-        ofs.write(reinterpret_cast<const char*>(&courseID), sizeof(courseID));
+int Student::getId() const {
+    return this->id;
+}
+
+std::list<int> Student::getCourseIds() const {
+    return this->courseIds;
+}
+
+bool Student::operator<(const Student& other) const { return id < other.id; }
+bool Student::operator>(const Student& other) const { return id > other.id; }
+bool Student::operator==(const Student& other) const { return id == other.id; }
+
+void Student::enrollInCourse(int id) {
+    courseIds.push_front(id);
+}
+bool Student::hasCourse(int id) {
+    for (int courseId : courseIds) {
+        if (courseId == id) {
+            return true;
+        }
     }
-    return ofs;
+    return false;
 }
 
-ifstream& operator>>(ifstream& ifs, Student& student) {
-    size_t usernameLength;
-    size_t passwordLength;
-    ifs.read(reinterpret_cast<char*>(&usernameLength), sizeof(usernameLength));
-    student.username.resize(usernameLength);
-    ifs.read(&student.username[0], usernameLength);
-    ifs.read(reinterpret_cast<char*>(&passwordLength), sizeof(passwordLength));
-    student.password.resize(passwordLength);
-    ifs.read(&student.password[0], passwordLength);
-    while (ifs.peek() != EOF) {
-        int courseID;
-        ifs.read(reinterpret_cast<char*>(&courseID), sizeof(courseID));
-        student.courseList.push(courseID);
-    }
-    return ifs;
+void Student::removeCourse(int courseId) {
+    courseIds.remove(courseId);
 }
+

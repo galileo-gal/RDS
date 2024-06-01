@@ -11,4 +11,11 @@ add_executable(StudentManagementSystem main.cpp
         Teacher.cpp
         Teacher.h
         Student.cpp
-        Student.h)
+        Student.h
+        PriorityQueue.h
+        BST.h
+        Queue.h
+        Stack.h
+        LinkedList.h
+        BSTNode.h
+)
